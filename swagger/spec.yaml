@@ -1,0 +1,231 @@
+openapi: 3.0.1
+info:
+  title: Node boilerplate
+  description: OpenAPI description of the node boilerplate service
+  version: 0.0.1
+tags:
+  - name: health
+    description: write your own description
+paths:
+  /health/:
+    get:
+      tags:
+        - health
+      summary: Route for checking if server is alive
+      operationId: health
+      responses:
+        "200":
+          description: service is alive
+          content: {}
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Technical Error
+  /todo/:
+    get:
+      tags:
+        - todo
+      summary: Returns all todos objects
+      operationId: getAllTodo
+      responses:
+        "200":
+          description: Returns all todo objects in the database
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MultipleTodoResponse"
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Client Error
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Technical Error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Technical Error
+    post:
+      tags:
+        - todo
+      summary: Posts a new todo into the database
+      operationId: postTodo
+      responses:
+        "200":
+          description: Posted a new todo succesfuly
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SingleTodoResponse"
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Client Error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Technical Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTodoRequest"
+        required: true
+    delete:
+      tags:
+        - todo
+      summary: Deletes all todos from the database
+      operationId: removeAllTodos
+      responses:
+        "200":
+          description: Succesfully deleted all the todos
+          content: {}
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Client Error
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Technical Error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Technical Error
+  /todo/{id}:
+    get:
+      tags:
+        - todo
+      summary: Returns a todo based on id query param
+      parameters:
+        - description: The user identifier.
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      operationId: getSpecificTodo
+      responses:
+        "200":
+          description: Returns the specific todo object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SingleTodoResponse"
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Technical Error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Technical Error
+    delete:
+      tags:
+        - todo
+      summary: Deletes a specific todo from the database
+      parameters:
+        - description: The user identifier.
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      operationId: removeSpecificTodo
+      responses:
+        "200":
+          description: Succesfully deleted the specific todo
+          content: {}
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Client Error
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Technical Error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Technical Error
+components:
+  schemas:
+    CreateTodoRequest:
+      required:
+        - message
+      type: object
+      properties:
+        message:
+          type: string
+    SingleTodoResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        _id:
+          type: object
+        __v:
+          type: number
+    MultipleTodoResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          message:
+            type: string
+          _id:
+            type: object
+          __v:
+            type: number
+    ErrorResponse:
+      properties:
+        detail:
+          description: Optional text that describes the error in more detail
+          type: string
+        status:
+          description: repeat of returned HTTP Status Code
+          type: number
+        type:
+          description: URI for type of error
+          minLength: 1
+          type: string
+        placement:
+          type: string
+          default: none
+          enum:
+            - inline
+            - global
+            - none
+      required:
+        - status
+        - type
+      type: object
