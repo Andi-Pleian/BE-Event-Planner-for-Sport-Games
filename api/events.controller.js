@@ -1,6 +1,20 @@
+// Imports
 import EventsDAO from "../dao/eventsDAO.js"
 
+/**
+ * Events Controller Class
+ * 
+ */
 export default class EventsController {
+
+  /**
+   * Method Name: apiGetEvents()   
+   * Method Scope:
+   * 
+   * @param {*} req   => request
+   * @param {*} res   => response
+   * @param {*} next  => next middleware
+   */
   static async apiGetEvents(req, res, next) {
     const eventsPerPage = req.query.eventsPerPage ? parseInt(req.query.eventsPerPage, 10) : 20
 

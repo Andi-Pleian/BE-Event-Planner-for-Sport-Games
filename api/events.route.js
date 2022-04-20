@@ -1,3 +1,4 @@
+// Imports
 import express from "express"
 import EventsCtrl from "./events.controller.js"
 
@@ -15,4 +16,5 @@ router
   .put(ReviewsCtrl.apiUpdateReview)
   .delete(ReviewsCtrl.apiDeleteReview)
 */
+
 export default router
