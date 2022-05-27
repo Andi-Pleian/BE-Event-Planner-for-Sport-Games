@@ -13,8 +13,8 @@ router.post("/", async (req, res) => {
     let transport = nodemailer.createTransport({
       service:'Gmail',
       auth: {
-        user: 'vlad282928@gmail.com',
-        pass: '.(.d.).(v).2015',
+        user: process.env.USER,
+        pass: process.env.PASS,
       },
     });
 
@@ -24,16 +24,16 @@ router.post("/", async (req, res) => {
         let mailOptions = {
           from:data.eventOrganizer,
           to:invitation,
-          subject: "test email",
-          text: "email test",
+          subject: "Sport Event Invitation",
+          text: "Hello, You have been invited to the event: " + data.eventName + " by " + data.eventOrganizer + ".",
         };
         
         transport.sendMail(mailOptions, (error,response) => {
           if(error) {
-            res.send(error)
+            res.status(error)
           }
           else{
-            res.send('Success')
+            res.status('Success')
           }
         });
         transport.close();
